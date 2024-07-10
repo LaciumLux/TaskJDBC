@@ -6,10 +6,16 @@ import jm.task.core.jdbc.util.Util;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Logger;
 
 public class UserDaoJDBCImpl implements UserDao {
-    public UserDaoJDBCImpl() {
 
+    private static final Logger logger = Logger.getLogger(UserDaoJDBCImpl.class.getName());
+
+    private String connect = "Connection is closed";
+
+    public UserDaoJDBCImpl() {
+        //default implementation
     }
 
     public void createUsersTable() {
@@ -23,26 +29,26 @@ public class UserDaoJDBCImpl implements UserDao {
                     " PRIMARY KEY (id))\n" +
                     "ENGINE = InnoDB\n" +
                     "DEFAULT CHARACTER SET = utf8;\n");
-            System.out.println("Таблица успешно создана.");
+            logger.info("Таблица успешно создана.");
         } catch (SQLSyntaxErrorException ex) {
-            System.out.println("Таблица уже существует!");
+            logger.info("Таблица уже существует!");
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        System.out.println("Connection is closed");
+        logger.info(connect);
     }
 
     public void dropUsersTable() {
         try (Connection connection = Util.getConnection();
              Statement statement = connection.createStatement()) {
             statement.executeUpdate("DROP TABLE user");
-            System.out.println("Таблица успешно удалена.");
+            logger.info("Таблица успешно удалена.");
         } catch (SQLSyntaxErrorException ex) {
-            System.out.println("Таблицы не существует!");
+            logger.info("Таблицы не существует!");
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        System.out.println("Connection is closed");
+        logger.info(connect);
     }
 
     public void saveUser(String name, String lastName, byte age) {
@@ -54,11 +60,11 @@ public class UserDaoJDBCImpl implements UserDao {
 
             preparedStatement.executeUpdate();
 
-            System.out.println("User с именем - " + name + " добавлен в базу данных." );
+            System.out.println("User с именем - " + name + " добавлен в базу данных.");
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        System.out.println("Connection is closed");
+        logger.info(connect);
     }
 
     public void removeUserById(long id) {
@@ -71,6 +77,7 @@ public class UserDaoJDBCImpl implements UserDao {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+        logger.info(connect);
     }
 
     public List<User> getAllUsers() {
@@ -78,7 +85,7 @@ public class UserDaoJDBCImpl implements UserDao {
 
         try (Connection connection = Util.getConnection();
              Statement statement = connection.createStatement()) {
-            ResultSet resultSet = statement.executeQuery("SELECT * FROM user");
+            ResultSet resultSet = statement.executeQuery("SELECT user.id, user.name, user.lastName, user.age FROM user");
             while (resultSet.next()) {
                 User user = new User();
                 user.setId(resultSet.getLong("id"));
@@ -91,7 +98,7 @@ public class UserDaoJDBCImpl implements UserDao {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        System.out.println("Connection is closed");
+        logger.info(connect);
         System.out.println(userList);
         return userList;
     }
@@ -100,10 +107,10 @@ public class UserDaoJDBCImpl implements UserDao {
         try (Connection connection = Util.getConnection();
              Statement statement = connection.createStatement()) {
             statement.executeUpdate("TRUNCATE user");
-            System.out.println("Таблица успешно очищена.");
+            logger.info("Таблица успешно очищена.");
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        System.out.println("Connection is closed");
+        logger.info(connect);
     }
 }
