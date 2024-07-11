@@ -19,7 +19,7 @@ public class User {
     private Byte age;
 
     public User() {
-
+        //default implementation
     }
 
     public User(String name, String lastName, Byte age) {
@@ -30,7 +30,7 @@ public class User {
 
     @Override
     public String toString() {
-        return "User{" +
+        return "\nUser{" +
                 "id=" + getId() +
                 ", name='" + getLastName() + '\'' +
                 ", lastName='" + getLastName() + '\'' +

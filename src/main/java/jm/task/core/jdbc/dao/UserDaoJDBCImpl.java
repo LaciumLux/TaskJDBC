@@ -10,9 +10,9 @@ import java.util.logging.Logger;
 
 public class UserDaoJDBCImpl implements UserDao {
 
-    private static final Logger logger = Logger.getLogger(UserDaoJDBCImpl.class.getName());
+    private static final Logger LOGGER = Logger.getLogger(UserDaoJDBCImpl.class.getName());
 
-    private String connect = "Connection is closed";
+    private static final String CONNECT = "Connection is closed";
 
     public UserDaoJDBCImpl() {
         //default implementation
@@ -29,26 +29,26 @@ public class UserDaoJDBCImpl implements UserDao {
                     " PRIMARY KEY (id))\n" +
                     "ENGINE = InnoDB\n" +
                     "DEFAULT CHARACTER SET = utf8;\n");
-            logger.info("Таблица успешно создана.");
+            LOGGER.info("Таблица успешно создана.");
         } catch (SQLSyntaxErrorException ex) {
-            logger.info("Таблица уже существует!");
+            LOGGER.info("Таблица уже существует!");
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        logger.info(connect);
+        LOGGER.info(CONNECT);
     }
 
     public void dropUsersTable() {
         try (Connection connection = Util.getConnection();
              Statement statement = connection.createStatement()) {
             statement.executeUpdate("DROP TABLE user");
-            logger.info("Таблица успешно удалена.");
+            LOGGER.info("Таблица успешно удалена.");
         } catch (SQLSyntaxErrorException ex) {
-            logger.info("Таблицы не существует!");
+            LOGGER.info("Таблицы не существует!");
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        logger.info(connect);
+        LOGGER.info(CONNECT);
     }
 
     public void saveUser(String name, String lastName, byte age) {
@@ -64,7 +64,7 @@ public class UserDaoJDBCImpl implements UserDao {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        logger.info(connect);
+        LOGGER.info(CONNECT);
     }
 
     public void removeUserById(long id) {
@@ -77,7 +77,7 @@ public class UserDaoJDBCImpl implements UserDao {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        logger.info(connect);
+        LOGGER.info(CONNECT);
     }
 
     public List<User> getAllUsers() {
@@ -98,8 +98,7 @@ public class UserDaoJDBCImpl implements UserDao {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        logger.info(connect);
-        System.out.println(userList);
+        LOGGER.info(CONNECT);
         return userList;
     }
 
@@ -107,10 +106,10 @@ public class UserDaoJDBCImpl implements UserDao {
         try (Connection connection = Util.getConnection();
              Statement statement = connection.createStatement()) {
             statement.executeUpdate("TRUNCATE user");
-            logger.info("Таблица успешно очищена.");
+            LOGGER.info("Таблица успешно очищена.");
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        logger.info(connect);
+        LOGGER.info(CONNECT);
     }
 }
